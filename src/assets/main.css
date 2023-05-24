@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .main-nav > a {
-	@apply p-3 text-white text-2xl flex justify-center items-center hover:bg-sky-600
+	@apply px-3 py-6 text-white text-2xl flex justify-center items-center hover:bg-sky-800
 }
