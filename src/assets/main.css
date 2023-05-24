@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-nav > a {
+	@apply p-3 text-white text-2xl flex justify-center items-center hover:bg-sky-600
+}
