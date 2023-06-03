@@ -10,6 +10,14 @@
 	@apply bg-sky-800
 }
 
+.tool {
+	@apply flex items-center gap-2 px-2
+}
+
+.tool-primary {
+	@apply text-sky-700 font-medium
+}
+
 .btn {
 	@apply border rounded-lg px-3 py-2 flex justify-center items-center gap-2 text-sm font-bold whitespace-nowrap
 }

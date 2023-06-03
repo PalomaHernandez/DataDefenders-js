@@ -1,17 +1,42 @@
 import router from '@/router'
 import {defineStore} from 'pinia'
+import {type AccountConfirmed} from '@/types/Account'
+import type ErrorResponse from '@/types/ErrorResponse'
 import {axiosLoginInstance, axiosApiInstance} from '@/api'
-import type SuccessfulResponse from '@/types/SuccessfulResponse'
 import {clearValidationErrors, handleErrors} from '@/helpers'
-import type ErrorResponse from "@/types/ErrorResponse";
+import type SuccessfulResponse from '@/types/SuccessfulResponse'
 
-export const useLoginStore = defineStore('login', {
+export const useAuthStore = defineStore('auth', {
     state: () => ({
         authenticated: false,
         loggingIn: false,
         loggingOut: false,
+        registering: false,
     }),
     actions: {
+        async register(account: AccountConfirmed):Promise<void> {
+            clearValidationErrors()
+            if(!this.registering){
+                this.registering = true
+                return axiosLoginInstance.get('sanctum/csrf-cookie').then(() => {
+                    return axiosApiInstance.post('register', account).then(():void => {
+                        this.authenticated = false
+                        this.registering = false
+                        router.push({name: 'login'})
+                    }).catch(error => {
+                        throw error
+                    })
+                }).catch((error: ErrorResponse):void => {
+                    handleErrors(error).then((message: string):void => {
+                        alert(message)
+                    }).catch((routeName: string):void => {
+                        router.push({name: routeName})
+                    })
+                }).finally(():void => {
+                    this.registering = false
+                })
+            }
+        },
         async login(credentials: {email: string, password: string}):Promise<void> {
             clearValidationErrors()
             if(!this.loggingIn){
