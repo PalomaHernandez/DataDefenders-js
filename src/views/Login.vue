@@ -16,6 +16,7 @@
 				<i class="fa-solid fa-key"></i>
 				Log in
 			</button>
+			<RouterLink :to="{name: 'register'}" class="font-medium text-sky-700">Don't have an account? Register here.</RouterLink>
 		</form>
 	</Layout>
 </template>
@@ -24,29 +25,31 @@
 import {ref} from 'vue'
 import router from '@/router'
 import Layout from '@/Layout.vue'
-import {useLoginStore} from '@/stores/login'
+import {RouterLink} from 'vue-router'
+import {useAuthStore} from '@/stores/auth'
 import LabeledObject from '@/components/LabeledObject.vue'
 
 export default {
 	name: "Home",
 	components: {
 		Layout,
-		LabeledObject
+		RouterLink,
+		LabeledObject,
 	},
 	computed: {
 		isAuthenticated():boolean {
-			return this.loginStore.authenticated
+			return this.authStore.authenticated
 		}
 	},
 	setup(){
-		const loginStore = useLoginStore()
+		const authStore = useAuthStore()
 		const credentials = ref({
 			email: '',
 			password: '',
 		})
 		return {
-			loginStore,
-			credentials
+			authStore,
+			credentials,
 		}
 	},
 	methods: {
@@ -56,7 +59,7 @@ export default {
 				if(!form.checkValidity()){
 					form.reportValidity()
 				} else {
-					this.loginStore.login(this.credentials)
+					this.authStore.login(this.credentials)
 				}
 			} else {
 				alert('Oops, something went wrong! Please try again later.')
@@ -65,7 +68,7 @@ export default {
 	},
 	mounted(){
 		if(this.isAuthenticated){
-			router.push({name: 'login'})
+			router.push({name: 'home'})
 		}
 	}
 }
