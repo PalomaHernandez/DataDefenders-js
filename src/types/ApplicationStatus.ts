@@ -1,4 +1,5 @@
 enum ApplicationStatus {
+	All = '',
 	Accepted = 'accepted',
 	Documentation = 'documentation',
 	Pending = 'pending',

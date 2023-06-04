@@ -1,9 +1,7 @@
 <template>
 	<div v-if="comment" class="px-3 py-2 rounded bg-gray-100 text-gray-700 flex flex-col gap-2">
-		<div class="flex justify-between items-center gap-3">
-			<p class="font-medium" v-html="fullName"></p>
-			<p class="text-sm text-gray-400">{{ printDateTime(comment.created_at) }}</p>
-		</div>
+		<p class="font-medium" v-html="fullName"></p>
+		<p class="text-sm text-gray-400">{{ printDateTime(comment.created_at) }}</p>
 		<p :class="`text-sm${clamped ? ' line-clamp-6' : ''}`" v-html="comment.text"></p>
 	</div>
 </template>

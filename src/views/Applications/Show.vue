@@ -19,6 +19,7 @@
 				<StatusIndicator :status="application.status"/>
 			</div>
 			<p class="font-bold text-lg">{{ application.offer.title }}</p>
+			<RouterLink :to="{name: route(application), params: {id: application.offer.id}}" class="text-sky-700 font-medium text-sm">View offer</RouterLink>
 			<LabeledObject>
 				<template #label>Your documentation</template>
 				<div class="flex flex-col items-stretch gap-1" v-if="application.documentation_files.length > 0">
@@ -41,16 +42,6 @@
 					<i class="fa-solid fa-chevron-right"></i>
 				</RouterLink>
 			</LabeledObject>
-			<LabeledObject @click="clampDescription = !clampDescription">
-				<template #label>Description</template>
-				<div :class="`text-sm text-gray-500${clampDescription ? ' line-clamp-6' : ''}`" v-html="application.offer.description"></div>
-				<p class="font-medium text-sm text-gray-500" v-if="clampDescription">Tap on text to expand/collapse</p>
-			</LabeledObject>
-			<LabeledObject @click="clampRequirements = !clampRequirements">
-				<template #label>Requirements</template>
-				<div :class="`text-sm text-gray-500${clampRequirements ? ' line-clamp-6' : ''}`" v-html="application.offer.requirements"></div>
-				<p class="font-medium text-sm text-gray-500" v-if="clampRequirements">Tap on text to expand/collapse</p>
-			</LabeledObject>
 		</div>
 		<Loading v-else/>
 	</Layout>
@@ -62,7 +53,6 @@ import {RouterLink} from 'vue-router'
 import Loading from '@/components/Loading.vue'
 import Comment from '@/components/Comment.vue'
 import type UserComment from '@/types/Comment'
-import {ref, type Ref, type UnwrapRef} from 'vue'
 import type Application from '@/types/Application'
 import {isDocumentation, printDateTime} from '@/helpers'
 import {useApplicationStore} from '@/stores/applications'
@@ -104,17 +94,21 @@ export default {
 	},
 	setup(){
 		const applicationStore = useApplicationStore()
-		const clampDescription: Ref<UnwrapRef<boolean>> = ref(true)
-		const clampRequirements: Ref<UnwrapRef<boolean>> = ref(true)
 		return {
 			applicationStore,
-			clampDescription,
-			clampRequirements,
 		}
 	},
 	methods: {
 		isDocumentation,
 		printDateTime,
+		route(application: Application): string{
+			if(application.is_job){
+				return 'offers.job.show'
+			} else if(application.is_scholarship){
+				return 'offers.scholarship.show'
+			}
+			return ''
+		}
 	},
 	created(){
 		this.applicationStore.get(this.$props.id)

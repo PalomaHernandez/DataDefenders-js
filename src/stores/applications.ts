@@ -1,53 +1,85 @@
 import axios from 'axios'
 import router from '@/router'
 import {defineStore} from 'pinia'
+import OfferType from '@/types/OfferType'
 import {apiUrl, axiosApiInstance} from '@/api'
 import type Application from '@/types/Application'
+import {type ApplicationResponse, type ApplicationsResponse} from '@/types/Application'
 import type PdfResponse from '@/types/PdfResponse'
 import type ErrorResponse from '@/types/ErrorResponse'
 import ApplicationStatus from '@/types/ApplicationStatus'
 import type DocumentationFile from '@/types/DocumentationFile'
 import {type DocumentationFilesResponse} from '@/types/DocumentationFile'
 import {checkFileSizes, clearValidationErrors, handleErrors} from '@/helpers'
-import {type ApplicationResponse, type ApplicationsResponse} from '@/types/Application'
 
 export const useApplicationStore = defineStore('application', {
 	state: (): {
+		type: OfferType,
+		status: ApplicationStatus,
 		applications: Application[],
 		application: Application | null,
 		documentationFile: string | null,
 		loading: boolean,
+		filtering: boolean,
 		fetching: boolean,
 		fetchingComments: boolean,
 		fetchingDocumentationFile: boolean,
 		uploading: boolean
 	} => ({
+		type: OfferType.All,
+		status: ApplicationStatus.All,
 		applications: [],
 		application: null,
 		documentationFile: null,
 		loading: false,
+		filtering: false,
 		fetching: false,
 		fetchingComments: false,
 		fetchingDocumentationFile: false,
 		uploading: false,
 	}),
 	actions: {
+		async switchType(type: OfferType): Promise<void>{
+			this.type = type
+			this.toggleFiltering()
+			await this.load()
+		},
+		async switchStatus(status: ApplicationStatus): Promise<void>{
+			this.status = status
+			this.toggleFiltering()
+			await this.load()
+		},
+		toggleFiltering(){
+			this.filtering = !this.filtering
+		},
 		async load(): Promise<void>{
 			clearValidationErrors()
 			if(!this.loading){
 				this.loading = true
-				axiosApiInstance.get('applications').then(({data}: ApplicationsResponse): void => {
-					this.applications = data
-				}).catch((error: ErrorResponse): void => {
-					this.applications = []
-					handleErrors(error).then((message: string): void => {
-						alert(message)
-					}).catch((routeName: string): void => {
-						router.push({name: routeName})
+				let url: string|null = null
+				if(this.type === OfferType.Job){
+					url = `applications/job/${this.status}`
+				} else if(this.type === OfferType.Scholarship){
+					url = `applications/scholarship/${this.status}`
+				} else if(this.type === OfferType.All){
+					url = `applications/${this.status}`
+				}
+				if(url){
+					axiosApiInstance.get(url).then(({data}: ApplicationsResponse): void => {
+						this.applications = data
+					}).catch((error: ErrorResponse): void => {
+						this.applications = []
+						handleErrors(error).then((message: string): void => {
+							alert(message)
+						}).catch((routeName: string): void => {
+							router.push({name: routeName})
+						})
+					}).finally((): void => {
+						this.loading = false
 					})
-				}).finally((): void => {
-					this.loading = false
-				})
+				} else {
+					alert('Oops! Something went wrong!')
+				}
 			}
 		},
 		async get(applicationId: string): Promise<void>{
@@ -63,7 +95,7 @@ export const useApplicationStore = defineStore('application', {
 				await this.fetch(id)
 			}
 		},
-		async fetch(id: number|null = null): Promise<void>{
+		async fetch(id: number | null = null): Promise<void>{
 			clearValidationErrors()
 			if(!this.fetching){
 				if(id || this.application){
