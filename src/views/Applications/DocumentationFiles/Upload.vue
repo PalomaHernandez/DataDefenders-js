@@ -2,12 +2,13 @@
 	<Layout>
 		<template #title>
 			<RouterLink v-if="application" :to="{name: 'applications.show', params: {id: application.id}}" class="tool tool-primary">
-				<i class="fa-solid fa-chevron-left"></i> <span class="truncate">{{ application.offer.title }}</span>
+				<i class="fa-solid fa-chevron-left"></i>
+				<span class="truncate">{{ application.offer.title }}</span>
 			</RouterLink>
 		</template>
 		<template #status></template>
 		<template #tools>
-			<button type="button" class="tool tool-primary" @click="upload">
+			<button type="button" class="button button-primary" @click="upload">
 				<i class="fa-solid fa-spinner animate-spin" v-if="uploading"></i>
 				<i class="fa-solid fa-upload" v-else></i>
 			</button>
