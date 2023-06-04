@@ -19,3 +19,11 @@ export interface Account extends Model {
 export interface AccountConfirmed extends Account {
 	password_confirmation: string,
 }
+
+export interface AccountResponse {
+    data: {
+		res: boolean,
+		text: string,
+		user: Account,
+	},
+}

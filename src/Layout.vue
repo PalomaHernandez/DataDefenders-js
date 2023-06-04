@@ -1,5 +1,5 @@
 <template>
-	<header class="flex gap-4 px-3 py-2 border-b shadow z-10">
+	<header class="flex gap-4 justify-center items-center px-3 py-2 border-b shadow z-10">
 		<div class="flex-grow font-semibold">
 			<slot name="title"/>
 		</div>
