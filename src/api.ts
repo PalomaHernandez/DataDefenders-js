@@ -1,6 +1,6 @@
 import axios, {type AxiosInstance} from 'axios'
 
-const apiUrl: string = 'https://unimanager.test'
+export const apiUrl: string = 'https://unimanager.test'
 
 export const axiosLoginInstance: AxiosInstance = axios.create({
     baseURL: apiUrl,

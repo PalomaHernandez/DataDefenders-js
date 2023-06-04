@@ -1,6 +1,6 @@
 <template>
 	<div :class="classes">
-		<p :class="`text-sm text-neutral-600${required ? ' required' : ''}`"><slot name="label"/></p>
+		<p :class="`text-sm font-medium text-neutral-600${required ? ' required' : ''}`"><slot name="label"/></p>
 		<slot/>
 	</div>
 </template>

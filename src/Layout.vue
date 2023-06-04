@@ -1,9 +1,10 @@
 <template>
-	<header class="flex gap-4 justify-center items-center px-3 py-2 border-b shadow z-10">
+	<slot name="modals"/>
+	<header class="flex items-center gap-4 px-3 py-2 border-b shadow z-10">
 		<div class="flex-grow font-semibold">
 			<slot name="title"/>
 		</div>
-		<div class="fixed lg:relative left-0 bottom-14 lg:left-auto lg:bottom-auto m-5 lg:m-0 z-20 w-full lg:w-auto">
+		<div class="fixed lg:relative left-0 bottom-14 lg:left-auto lg:bottom-auto z-20 w-full lg:w-auto">
 			<div class="relative w-full lg:w-auto">
 				<div class="absolute lg:relative w-full lg:w-auto">
 					<slot name="status"/>
@@ -12,7 +13,7 @@
 		</div>
 		<slot name="tools"/>
 	</header>
-	<main class="flex-grow flex flex-col overflow-y-auto bg-gray-50">
+	<main class="flex-grow flex flex-col gap-3 overflow-y-auto bg-gray-50">
 		<slot/>
 	</main>
 	<footer class="bg-sky-900">
@@ -20,7 +21,7 @@
 			<RouterLink :to="{name: 'search'}">
 				<i class="fa-solid fa-search"></i>
 			</RouterLink>
-			<RouterLink :to="{name: 'offers'}">
+			<RouterLink :to="{name: 'applications'}">
 				<i class="fa-solid fa-file-edit"></i>
 			</RouterLink>
 			<RouterLink :to="{name: 'home'}" class="!p-1">
