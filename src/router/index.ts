@@ -2,6 +2,11 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Account/Register.vue'
+import Application from '@/views/Applications/Show.vue'
+import Applications from '@/views/Applications/Index.vue'
+import Comments from '@/views/Applications/Comments/Index.vue'
+import DocumentationFile from '@/views/Applications/DocumentationFiles/Show.vue'
+import UploadDocumentation from '@/views/Applications/DocumentationFiles/Upload.vue'
 
 const routes = [
     {
@@ -10,9 +15,33 @@ const routes = [
         component: Home
     },
     {
-        path: '/offers',
-        name: 'offers',
-        component: Home
+        path: '/applications',
+        name: 'applications',
+        component: Applications
+    },
+    {
+        path: '/applications/:id',
+        name: 'applications.show',
+        component: Application,
+        props: true
+    },
+    {
+        path: '/applications/files/:id',
+        name: 'applications.files.show',
+        component: DocumentationFile,
+        props: true
+    },
+    {
+        path: '/applications/:id/files/upload',
+        name: 'applications.files.upload',
+        component: UploadDocumentation,
+        props: true
+    },
+    {
+        path: '/applications/:id/comments',
+        name: 'applications.comments',
+        component: Comments,
+        props: true
     },
     {
         path: '/search',

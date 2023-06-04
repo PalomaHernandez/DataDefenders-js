@@ -1,6 +1,6 @@
 import type Model from '@/types/Model'
 
-export interface Account extends Model {
+export default interface Account extends Model {
 	first_name: string,
 	middle_name: string|null,
 	last_name: string,

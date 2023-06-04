@@ -18,6 +18,10 @@
 	@apply text-sky-700 font-medium
 }
 
+.file-input {
+	@apply file:rounded file:border-0 file:bg-sky-700 file:text-sm file:text-white file:font-medium file:px-3 file:py-2
+}
+
 .btn {
 	@apply border rounded-lg px-3 py-2 flex justify-center items-center gap-2 text-sm font-bold whitespace-nowrap
 }

@@ -1,4 +1,7 @@
+import dayjs from 'dayjs'
+import {apiUrl} from '@/api'
 import type ErrorResponse from '@/types/ErrorResponse'
+import ApplicationStatus from '@/types/ApplicationStatus'
 
 export const handleErrors: (error: ErrorResponse) => Promise<string> = async ({response}: ErrorResponse):Promise<string> => {
 	return new Promise<string>(async (resolve, reject):Promise<void> => {
@@ -56,4 +59,42 @@ export function clearValidationErrors(): void{
 	for(let invalidText of invalidTextTags){
 		(invalidText as HTMLElement).innerText = ''
 	}
+}
+
+export function printDate(timestamp: string|null): string{
+	if(timestamp){
+		return dayjs(timestamp).format('MM/DD/YYYY')
+	}
+	return dayjs().format('MM/DD/YYYY')
+}
+
+export function printDateTime(timestamp: string|null): string{
+	if(timestamp){
+		return dayjs(timestamp).format('MM/DD/YYYY HH:mm')
+	}
+	return dayjs().format('MM/DD/YYYY HH:mm')
+}
+
+export function checkFileSizes(files: FileList):boolean {
+	let pass: boolean = true
+	for(let i: number = 0; pass && i < files.length; i++){
+		pass = files[i].size <= 8 * 1024 * 1024
+	}
+	return pass
+}
+
+export function isAccepted(status: string):boolean{
+	return status === ApplicationStatus.Accepted
+}
+
+export function isPending(status: string):boolean{
+	return status === ApplicationStatus.Pending
+}
+
+export function isDocumentation(status: string):boolean{
+	return status === ApplicationStatus.Documentation
+}
+
+export function isRejected(status: string):boolean{
+	return status === ApplicationStatus.Rejected
 }
