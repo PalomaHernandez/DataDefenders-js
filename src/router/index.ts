@@ -1,6 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
+import Account from '@/views/Account/Show.vue'
+import EditAccount from '@/views/Account/Edit.vue'
 import Register from '@/views/Account/Register.vue'
 import Application from '@/views/Applications/Show.vue'
 import Applications from '@/views/Applications/Index.vue'
@@ -51,7 +53,12 @@ const routes = [
     {
         path: '/account',
         name: 'account',
-        component: Home
+        component: Account
+    },
+    {
+        path: '/account/edit',
+        name: 'account.edit',
+        component: EditAccount
     },
     {
         path: '/login',
