@@ -9,6 +9,11 @@ import Applications from '@/views/Applications/Index.vue'
 import Comments from '@/views/Applications/Comments/Index.vue'
 import DocumentationFile from '@/views/Applications/DocumentationFiles/Show.vue'
 import UploadDocumentation from '@/views/Applications/DocumentationFiles/Upload.vue'
+import Offers from '@/views/Offers/Index.vue'
+import ScholarshipOffer from '@/views/Offers/Scholarship.vue'
+import JobOffer from '@/views/Offers/Job.vue'
+import ApplyForJob from '@/views/Offers/ApplyForJob.vue'
+import ApplyForScholarship from '@/views/Offers/ApplyForScholarship.vue'
 
 const routes = [
     {
@@ -48,7 +53,41 @@ const routes = [
     {
         path: '/search',
         name: 'search',
-        component: Home
+        component: Offers
+    },
+    {
+        path: '/offers/job',
+        name: 'offers.job',
+        component: Offers
+    },
+    {
+        path: '/offers/scholarship',
+        name: 'offers.scholarship',
+        component: Offers
+    },
+    {
+        path: '/offers/job/:id',
+        name: 'offers.job.show',
+        component: JobOffer,
+        props: true
+    },
+    {
+        path: '/offers/scholarship/:id',
+        name: 'offers.scholarship.show',
+        component: ScholarshipOffer,
+        props: true
+    },
+    {
+        path: '/offers/job/apply/:id',
+        name: 'offers.job.apply',
+        component: ApplyForJob,
+        props: true
+    },
+    {
+        path: '/offers/scholarship/apply/:id',
+        name: 'offers.scholarship.apply',
+        component: ApplyForScholarship,
+        props: true
     },
     {
         path: '/account',
