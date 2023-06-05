@@ -7,7 +7,7 @@
 		</template>
 		<template #status></template>
 		<template #tools>
-			<button type="button" class="tool tool-primary" @click="apply">
+			<button type="button" class="btn btn-primary" @click="apply">
 				<i class="fa-solid fa-spinner animate-spin" v-if="applying"></i>
 				<i class="fa-solid fa-upload" v-else></i>
 			</button>

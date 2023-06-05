@@ -3,11 +3,15 @@
 		<template #title>
 			<RouterLink :to="{name: 'offers.job'}" class="tool tool-primary">
 				<i class="fa-solid fa-chevron-left"></i>
-				Job Offer
+				Job Offers
 			</RouterLink>
 		</template>
 		<template #status></template>
 		<template #tools>
+			<RouterLink v-if="offer && !offer.has_applied" :to="{name: 'offers.job.apply', params: {id: offer.id}}" class="btn btn-primary">
+				<i class="fa-solid fa-check"></i>
+				Apply
+			</RouterLink>
 			<button type="button" class="tool tool-primary" @click="offerStore.fetch()">
 				<i class="fa-solid fa-spinner animate-spin" v-if="fetching"></i>
 				<i class="fa-solid fa-sync" v-else></i>
@@ -18,10 +22,6 @@
 				<p class="font-light text-gray-400 text-sm">#{{ offer.id.toString().padStart(5, '0') }}</p>
 			</div>
 			<p class="font-bold text-lg">{{ offer.title }}</p>
-            <RouterLink :to="{name: 'offers.job.apply', params: {id: offer.id}}" class="btn btn-primary">
-						<p class="font-medium">Apply</p>
-						<i class="fa-solid fa-check"></i>
-			</RouterLink>
             <LabeledObject @click="clampBenefits = !clampBenefits">
                 <template #label>Benefits</template>
                 <div :class="`text-sm text-gray-500${clampBenefits ? ' line-clamp-6' : ''}`" v-html="offer.benefits"></div>
@@ -60,7 +60,7 @@ import Loading from '@/components/Loading.vue'
 import {ref, type Ref, type UnwrapRef} from 'vue'
 import {printDateTime} from '@/helpers'
 import type Offer from '@/types/Offer'
-import type JobOffer from '@/types/Offer'
+import {type JobOffer} from '@/types/Offer'
 import {useOfferStore} from '@/stores/offers'
 import LabeledObject from '@/components/LabeledObject.vue'
 

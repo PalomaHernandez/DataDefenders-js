@@ -1,18 +1,17 @@
-import axios from 'axios'
 import router from '@/router'
 import {defineStore} from 'pinia'
-import {apiUrl, axiosApiInstance} from '@/api'
+import {axiosApiInstance} from '@/api'
 import type Offer from '@/types/Offer'
 import type ErrorResponse from '@/types/ErrorResponse'
 import OfferType from '@/types/OfferType'
 import {checkFileSizes, clearValidationErrors, handleErrors} from '@/helpers'
-import {type OfferResponse, type OffersResponse, type ScholarshipOffer, type JobOffer} from '@/types/Offer'
+import {type OfferResponse, type OffersResponse} from '@/types/Offer'
 import type SuccessfulResponse from '@/types/SuccessfulResponse'
 
 export const useOfferStore = defineStore('offer', {
 	state: (): {
 		offers: Offer[],
-		type: OfferType,
+		type: OfferType|null,
 		offer: Offer | null,
 		loading: boolean,
 		fetching: boolean,
@@ -20,7 +19,7 @@ export const useOfferStore = defineStore('offer', {
 		applying: boolean,
 	} => ({
 		offers: [],
-		type: OfferType.Job,
+		type: null,
 		offer: null,
 		loading: false,
 		fetching: false,
@@ -28,10 +27,13 @@ export const useOfferStore = defineStore('offer', {
 		applying: false,
 	}),
 	actions: {
-		changeType(type: OfferType): void{
+		async changeType(type: OfferType): Promise<void>{
 			this.type = type
 			this.selecting = false
-			this.load()
+			await this.load()
+		},
+		toggleSelecting(): void{
+			this.selecting = !this.selecting
 		},
 		async load(): Promise<void>{
 			clearValidationErrors()
@@ -128,13 +130,21 @@ export const useOfferStore = defineStore('offer', {
 						}, {
 							headers: {
 								'Content-Type': 'multipart/form-data'
-							}
+							},
+							withCredentials: true
 						}).then(({data}: SuccessfulResponse): void => {
 							if(data.res){
+								if(this.offer){
+									this.offer.has_applied = true
+								}
 								alert(data.text)
+								if (this.type === OfferType.Job){
+									router.push({name: 'offers.job'})
+								} else if(this.type === OfferType.Scholarship){
+									router.push({name: 'offers.scholarship'})
+								}
 							}
 						}).catch((error: ErrorResponse): void => {
-							this.offer = null
 							handleErrors(error).then((message: string): void => {
 								alert(message)
 							}).catch((routeName: string): void => {

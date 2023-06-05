@@ -53,7 +53,7 @@
 <script lang="ts">
 import Layout from '@/Layout.vue'
 import {useAuthStore} from '@/stores/auth'
-import {type Account} from '@/types/Account'
+import type Account from '@/types/Account'
 import LabeledObject from '@/components/LabeledObject.vue'
 
 export default {

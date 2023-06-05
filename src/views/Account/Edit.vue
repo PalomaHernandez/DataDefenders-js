@@ -74,7 +74,7 @@
 <script lang="ts">
 import Layout from '@/Layout.vue'
 import {useAuthStore} from '@/stores/auth'
-import {type Account} from '@/types/Account'
+import type Account from '@/types/Account'
 import LabeledObject from '@/components/LabeledObject.vue'
 
 export default {
@@ -103,10 +103,8 @@ export default {
             const form = this.$refs.form as HTMLFormElement
             if(!form.checkValidity()){
                 form.reportValidity()
-            } else if (this.currentAccount){
-                this.authStore.updateAccount(this.currentAccount)
-            } else{
-                alert('Oops, something went wrong! Please try again later.')
+            } else {
+                this.authStore.updateAccount()
             }
         } else {
             alert('Oops, something went wrong! Please try again later.')

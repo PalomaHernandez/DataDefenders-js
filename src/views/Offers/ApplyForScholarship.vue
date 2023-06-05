@@ -7,7 +7,7 @@
 		</template>
 		<template #status></template>
 		<template #tools>
-			<button type="button" class="tool tool-primary" @click="apply">
+			<button type="button" class="btn btn-primary" @click="apply">
 				<i class="fa-solid fa-spinner animate-spin" v-if="applying"></i>
 				<i class="fa-solid fa-upload" v-else></i>
 			</button>
@@ -33,8 +33,6 @@
 import Layout from '@/Layout.vue'
 import Loading from '@/components/Loading.vue'
 import {type Ref, ref, type UnwrapRef} from 'vue'
-import type Offer from '@/types/Offer'
-import OfferType from '@/types/OfferType'
 import {useOfferStore} from '@/stores/offers'
 import LabeledObject from '@/components/LabeledObject.vue'
 import type { ScholarshipOffer } from '@/types/Offer'

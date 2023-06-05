@@ -1,9 +1,10 @@
 import router from '@/router'
 import {defineStore} from 'pinia'
-import {type AccountConfirmed, type Account, type AccountResponse} from '@/types/Account'
+import type Account from '@/types/Account'
 import type ErrorResponse from '@/types/ErrorResponse'
 import {axiosLoginInstance, axiosApiInstance} from '@/api'
 import {clearValidationErrors, handleErrors} from '@/helpers'
+import {type AccountConfirmed, type AccountResponse} from '@/types/Account'
 
 export const useAuthStore = defineStore('auth', {
     state: ():{authenticated: boolean, loggingIn: boolean, loggingOut: boolean, registering: boolean, currentAccount: Account | null, updating: boolean} => ({
@@ -38,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
                 })
             }
         },
-        async updateAccount(updatedAccount: Account){
+        async updateAccount(): Promise<void>{
             clearValidationErrors()
             if(!this.updating){
                 this.updating = true
