@@ -1,14 +1,19 @@
 <template>
 	<Layout>
-        <template #title>Edit profile</template>
-        <template #status></template>
-        <template #tools>
-            <button type="submit" class="btn btn-primary" @click="update">
-                <i class="fa-solid fa-check"></i>
-                Save changes
-            </button>
-        </template>
-        <form v-if="currentAccount" class="flex flex-col items-stretch gap-3 p-4" ref="form" @submit.prevent="update">
+		<template #title>
+			<RouterLink :to="{name: 'account'}" class="tool tool-primary">
+				<i class="fa-solid fa-chevron-left"></i>
+				My account
+			</RouterLink>
+		</template>
+		<template #status></template>
+		<template #tools>
+			<button type="submit" class="btn btn-primary" @click="update">
+				<i class="fa-solid fa-check"></i> Save changes
+			</button>
+		</template>
+		<form v-if="currentAccount" class="flex flex-col items-stretch gap-3 p-4" ref="form" @submit.prevent="update">
+			<p class="font-bold text-lg">Edit profile</p>
 			<div class="flex flex-col md:flex-row md:items-center gap-3">
 				<LabeledObject required>
 					<template #label>First name</template>
@@ -23,7 +28,7 @@
 					<input type="text" id="last_name" name="last_name" v-model="currentAccount.last_name" required>
 				</LabeledObject>
 			</div>
-            <div class="flex flex-col md:flex-row md:items-center gap-3">
+			<div class="flex flex-col md:flex-row md:items-center gap-3">
 				<LabeledObject>
 					<template #label>E-mail address</template>
 					<p class="fake-disabled">{{ currentAccount.email }}</p>
@@ -78,38 +83,38 @@ import type Account from '@/types/Account'
 import LabeledObject from '@/components/LabeledObject.vue'
 
 export default {
-  name: "EditAccount",
-  components: {
-    Layout,
-    LabeledObject
-  },
-  computed: {
-    isAuthenticated(): boolean {
-      return this.authStore.authenticated
-    },
-    currentAccount(): Account | null{
-      return this.authStore.currentAccount
-    }
-  },
-  setup() {
-    const authStore = useAuthStore()
-    return {
-      authStore,
-    }
-  },
-  methods:{
-    update():void{
-        if(this.$refs && this.$refs.form){
-            const form = this.$refs.form as HTMLFormElement
-            if(!form.checkValidity()){
-                form.reportValidity()
-            } else {
-                this.authStore.updateAccount()
-            }
-        } else {
-            alert('Oops, something went wrong! Please try again later.')
-        }
-    }
-  }
+	name: "Edit",
+	components: {
+		Layout,
+		LabeledObject
+	},
+	computed: {
+		isAuthenticated(): boolean{
+			return this.authStore.authenticated
+		},
+		currentAccount(): Account | null{
+			return this.authStore.currentAccount
+		}
+	},
+	setup(){
+		const authStore = useAuthStore()
+		return {
+			authStore,
+		}
+	},
+	methods: {
+		update(): void{
+			if(this.$refs && this.$refs.form){
+				const form = this.$refs.form as HTMLFormElement
+				if(!form.checkValidity()){
+					form.reportValidity()
+				} else {
+					this.authStore.updateAccount()
+				}
+			} else {
+				alert('Oops, something went wrong! Please try again later.')
+			}
+		}
+	}
 }
 </script>

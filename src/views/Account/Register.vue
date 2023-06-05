@@ -2,12 +2,7 @@
 	<Layout>
 		<template #title>Register</template>
 		<template #status></template>
-		<template #tools>
-			<button type="submit" class="tool tool-primary" @click="register">
-				<i class="fa-solid fa-spinner animate-spin" v-if="registering"></i>
-				<i class="fa-solid fa-check" v-else></i>
-			</button>
-		</template>
+		<template #tools></template>
 		<form class="flex flex-col items-stretch gap-3 p-4" ref="form" @submit.prevent="register">
 			<div class="flex flex-col md:flex-row md:items-center gap-3">
 				<LabeledObject required>
@@ -75,6 +70,11 @@
 				<template #label>Postal code</template>
 				<input type="text" id="postal_code" name="postal_code" v-model="account.postal_code" required>
 			</LabeledObject>
+			<button type="submit" class="btn btn-primary" @click="register">
+				<i class="fa-solid fa-spinner animate-spin" v-if="registering"></i>
+				<i class="fa-solid fa-check" v-else></i>
+				Create account
+			</button>
 		</form>
 	</Layout>
 </template>
