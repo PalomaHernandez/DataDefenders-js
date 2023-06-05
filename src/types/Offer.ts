@@ -7,6 +7,8 @@ export default interface Offer extends Model {
 	title: string,
 	description: string,
 	requirements: string,
+	is_scholarship_offer: boolean,
+	is_job_offer: boolean,
 	applications: Application[],
 	accepted_applications: Application[],
 	pending_applications: Application[],
@@ -23,4 +25,12 @@ export interface JobOffer extends Offer {
 
 export interface ScholarshipOffer extends Offer {
 	majors: Major[],
+}
+
+export interface OffersResponse {
+	data: Offer[],
+}
+
+export interface OfferResponse {
+	data: Offer,
 }
