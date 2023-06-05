@@ -10,7 +10,11 @@
 				Applications
 			</RouterLink>
 		</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="applicationStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="applicationStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="applicationStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools>
 			<button type="button" class="tool tool-primary" @click="applicationStore.fetchDocumentationFile(id)">
 				<i class="fa-solid fa-spinner animate-spin" v-if="fetchingDocumentationFile"></i>
@@ -41,6 +45,15 @@ export default {
 		}
 	},
 	computed: {
+		success(): string|null{
+			return this.applicationStore.success
+		},
+		error(): string|null{
+			return this.applicationStore.error
+		},
+		info(): string|null{
+			return this.applicationStore.info
+		},
 		fetchingDocumentationFile(): boolean{
 			return this.applicationStore.fetchingDocumentationFile
 		},

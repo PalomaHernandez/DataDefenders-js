@@ -24,7 +24,10 @@ export const useApplicationStore = defineStore('application', {
 		fetching: boolean,
 		fetchingComments: boolean,
 		fetchingDocumentationFile: boolean,
-		uploading: boolean
+		uploading: boolean,
+		success: string|null,
+		error: string|null,
+		info: string|null,
 	} => ({
 		type: OfferType.All,
 		status: ApplicationStatus.All,
@@ -37,6 +40,9 @@ export const useApplicationStore = defineStore('application', {
 		fetchingComments: false,
 		fetchingDocumentationFile: false,
 		uploading: false,
+		success: null,
+		error: null,
+		info: null,
 	}),
 	actions: {
 		async switchType(type: OfferType): Promise<void>{
@@ -49,13 +55,24 @@ export const useApplicationStore = defineStore('application', {
 			this.toggleFiltering()
 			await this.load()
 		},
-		toggleFiltering(){
+		toggleFiltering(): void{
 			this.filtering = !this.filtering
+		},
+		clearMessages(): void{
+			this.info = null
+			this.success = null
+			this.error = null
+		},
+		showError(message: string): void{
+			this.clearMessages()
+			this.error = message
 		},
 		async load(): Promise<void>{
 			clearValidationErrors()
 			if(!this.loading){
 				this.loading = true
+				this.clearMessages()
+				this.info = 'Loading applications...'
 				let url: string|null = null
 				if(this.type === OfferType.Job){
 					url = `applications/job/${this.status}`
@@ -67,10 +84,12 @@ export const useApplicationStore = defineStore('application', {
 				if(url){
 					axiosApiInstance.get(url).then(({data}: ApplicationsResponse): void => {
 						this.applications = data
+						this.clearMessages()
 					}).catch((error: ErrorResponse): void => {
 						this.applications = []
 						handleErrors(error).then((message: string): void => {
-							alert(message)
+							this.clearMessages()
+							this.error = message
 						}).catch((routeName: string): void => {
 							router.push({name: routeName})
 						})
@@ -78,7 +97,8 @@ export const useApplicationStore = defineStore('application', {
 						this.loading = false
 					})
 				} else {
-					alert('Oops! Something went wrong!')
+					this.clearMessages()
+					this.error = 'Oops! Something went wrong!'
 				}
 			}
 		},
@@ -103,12 +123,17 @@ export const useApplicationStore = defineStore('application', {
 						id = this.application.id
 					}
 					this.fetching = true
+					this.clearMessages()
+					this.info = 'Reloading your application...'
 					axiosApiInstance.get(`applications/${id}/find`).then(({data}: ApplicationResponse): void => {
 						this.application = data
+						this.clearMessages()
+						this.success = 'Your application has been reloaded.'
 					}).catch((error: ErrorResponse): void => {
 						this.application = null
 						handleErrors(error).then((message: string): void => {
-							alert(message)
+							this.clearMessages()
+							this.error = message
 						}).catch((routeName: string): void => {
 							router.push({name: routeName})
 						})
@@ -116,7 +141,8 @@ export const useApplicationStore = defineStore('application', {
 						this.fetching = false
 					})
 				} else {
-					alert('No application has been selected.')
+					this.clearMessages()
+					this.error = 'No application has been selected.'
 				}
 			}
 		},
@@ -140,6 +166,8 @@ export const useApplicationStore = defineStore('application', {
 			clearValidationErrors()
 			if(!this.fetchingDocumentationFile){
 				this.fetchingDocumentationFile = true
+				this.clearMessages()
+				this.info = 'Fetching your documentation file...'
 				await axios.get(`${apiUrl}/api/applications/files/${id}/stream`, {
 					headers: {
 						Accept: 'application/pdf'
@@ -149,9 +177,11 @@ export const useApplicationStore = defineStore('application', {
 					this.documentationFile = URL.createObjectURL(new Blob([data], {
 						type: 'application/pdf'
 					}))
+					this.clearMessages()
 				}).catch((error: ErrorResponse): void => {
 					handleErrors(error).then((message: string): void => {
-						alert(message)
+						this.clearMessages()
+						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})
 					})
@@ -164,6 +194,8 @@ export const useApplicationStore = defineStore('application', {
 			if(!this.uploading && this.application){
 				if(checkFileSizes(files)){
 					this.uploading = true
+					this.clearMessages()
+					this.info = 'Uploading your documentation...'
 					axiosApiInstance.post(`applications/${this.application.id}/review`, {
 						files: files
 					}, {
@@ -171,20 +203,22 @@ export const useApplicationStore = defineStore('application', {
 							'Content-Type': 'multipart/form-data'
 						}
 					}).then(async ({data}: DocumentationFilesResponse): Promise<void> => {
+						this.clearMessages()
 						if(data.res && this.application){
 							this.application.status = ApplicationStatus.Pending
 							let file: DocumentationFile
 							for(file of data.files){
 								this.application.documentation_files.unshift(file)
 							}
-							alert(data.text)
+							this.success = data.text
 							await router.push({name: 'applications.show', params: {id: this.application.id}})
 						} else {
-							alert(data.text)
+							this.error = data.text
 						}
 					}).catch((error: ErrorResponse): void => {
 						handleErrors(error).then((message: string): void => {
-							alert(message)
+							this.clearMessages()
+							this.error = message
 						}).catch((routeName: string): void => {
 							router.push({name: routeName})
 						})
@@ -192,7 +226,8 @@ export const useApplicationStore = defineStore('application', {
 						this.uploading = false
 					})
 				} else {
-					alert('Please select files of 8MB or less.')
+					this.clearMessages()
+					this.error = 'Please select files of 8MB or less.'
 				}
 			}
 		},

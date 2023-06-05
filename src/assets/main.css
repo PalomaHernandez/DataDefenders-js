@@ -123,7 +123,7 @@ select {
 }
 
 .alert {
-	@apply px-3 py-2 rounded-lg flex flex-col gap-2
+	@apply px-3 py-2 rounded-lg flex flex-col gap-2 mx-3 shadow-lg border
 }
 
 .alert-header {
@@ -135,7 +135,7 @@ select {
 }
 
 .alert-success {
-	@apply bg-green-100 text-green-700
+	@apply bg-green-100 text-green-700 border-green-700
 }
 
 .alert-success > .alert-header {
@@ -143,11 +143,19 @@ select {
 }
 
 .alert-danger {
-	@apply bg-red-100 text-red-700
+	@apply bg-red-100 text-red-700 border-red-700
 }
 
 .alert-danger > .alert-header {
 	@apply border-red-200
+}
+
+.alert-info {
+	@apply bg-blue-100 text-blue-700 border-blue-700
+}
+
+.alert-info > .alert-header {
+	@apply border-blue-200
 }
 
 .dropdown {

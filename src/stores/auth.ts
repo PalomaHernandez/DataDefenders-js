@@ -13,31 +13,51 @@ export const useAuthStore = defineStore('auth', {
 		loggingOut: boolean,
 		registering: boolean,
 		currentAccount: Account | null,
-		updating: boolean
+		updating: boolean,
+		success: string|null,
+		error: string|null,
+		info: string|null,
 	} => ({
 		authenticated: false,
 		loggingIn: false,
 		loggingOut: false,
 		registering: false,
 		currentAccount: null,
-		updating: false
+		updating: false,
+		success: null,
+		error: null,
+		info: null,
 	}),
 	actions: {
+		clearMessages(): void{
+			this.info = null
+			this.success = null
+			this.error = null
+		},
+		showError(message: string): void{
+			this.clearMessages()
+			this.error = message
+		},
 		async register(account: AccountConfirmed): Promise<void>{
 			clearValidationErrors()
 			if(!this.registering){
 				this.registering = true
+				this.clearMessages()
+				this.info = 'Registering your new account...'
 				return axiosLoginInstance.get('sanctum/csrf-cookie').then(() => {
 					return axiosApiInstance.post('register', account).then((): void => {
 						this.authenticated = false
 						this.registering = false
+						this.clearMessages()
+						this.success = 'Your account has been created successfully!'
 						router.push({name: 'login'})
 					}).catch(error => {
 						throw error
 					})
 				}).catch((error: ErrorResponse): void => {
 					handleErrors(error).then((message: string): void => {
-						alert(message)
+						this.clearMessages()
+						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})
 					})
@@ -50,11 +70,15 @@ export const useAuthStore = defineStore('auth', {
 			clearValidationErrors()
 			if(this.currentAccount && !this.updating){
 				this.updating = true
+				this.clearMessages()
+				this.info = 'Updating your account...'
 				return axiosApiInstance.patch(`account/update/${this.currentAccount.id}`, this.currentAccount).then((): void => {
-					alert("The account was updated successfully.")
+					this.clearMessages()
+					this.success = 'The account was updated successfully.'
 				}).catch((error: ErrorResponse): void => {
 					handleErrors(error).then((message: string): void => {
-						alert(message)
+						this.clearMessages()
+						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})
 					})
@@ -67,23 +91,26 @@ export const useAuthStore = defineStore('auth', {
 			clearValidationErrors()
 			if(!this.loggingIn){
 				this.loggingIn = true
+				this.clearMessages()
+				this.info = 'Logging in...'
 				return axiosLoginInstance.get('sanctum/csrf-cookie').then(() => {
 					return axiosApiInstance.post('login', credentials).then(({data}: AccountResponse): void => {
+						this.clearMessages()
 						if(data.res){
 							this.authenticated = true
 							this.loggingIn = false
 							this.currentAccount = data.user
 							router.push({name: 'home'})
 						} else {
-							alert(data.text)
+							this.error = data.text
 						}
 					}).catch(error => {
 						throw error
 					})
 				}).catch((error: ErrorResponse): void => {
-					console.log(error)
 					handleErrors(error).then((message: string): void => {
-						alert(message)
+						this.clearMessages()
+						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})
 					})
@@ -96,13 +123,18 @@ export const useAuthStore = defineStore('auth', {
 			clearValidationErrors()
 			if(!this.loggingOut){
 				this.loggingOut = true
+				this.clearMessages()
+				this.info = 'Logging out...'
 				return axiosApiInstance.post('logout').then((): void => {
 					this.authenticated = false
 					this.loggingOut = false
+					this.clearMessages()
+					this.success = 'You have logged out successfully!'
 					router.push({name: 'login'})
 				}).catch((error: ErrorResponse): void => {
 					handleErrors(error).then((message: string): void => {
-						alert(message)
+						this.clearMessages()
+						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})
 					})
