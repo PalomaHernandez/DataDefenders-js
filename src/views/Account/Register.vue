@@ -1,7 +1,11 @@
 <template>
 	<Layout>
 		<template #title>Register</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="authStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="authStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="authStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools></template>
 		<form class="flex flex-col items-stretch gap-3 p-4" ref="form" @submit.prevent="register">
 			<div class="flex flex-col md:flex-row md:items-center gap-3">
@@ -94,6 +98,15 @@ export default {
 		Layout
 	},
 	computed: {
+		success(): string|null{
+			return this.authStore.success
+		},
+		error(): string|null{
+			return this.authStore.error
+		},
+		info(): string|null{
+			return this.authStore.info
+		},
 		isAuthenticated():boolean {
 			return this.authStore.authenticated
 		},
@@ -137,7 +150,7 @@ export default {
 					this.authStore.register(this.account)
 				}
 			} else {
-				alert('Oops, something went wrong! Please try again later.')
+				this.authStore.showError('Oops, something went wrong! Please try again later.')
 			}
 		}
 	},

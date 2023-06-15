@@ -6,7 +6,11 @@
 				<span class="truncate">{{ application.offer.title }}</span>
 			</RouterLink>
 		</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="applicationStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="applicationStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="applicationStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools>
 			<button type="button" class="button button-primary" @click="upload">
 				<i class="fa-solid fa-spinner animate-spin" v-if="uploading"></i>
@@ -46,6 +50,15 @@ export default {
 		}
 	},
 	computed: {
+		success(): string|null{
+			return this.applicationStore.success
+		},
+		error(): string|null{
+			return this.applicationStore.error
+		},
+		info(): string|null{
+			return this.applicationStore.info
+		},
 		uploading(): boolean{
 			return this.applicationStore.uploading
 		},
@@ -73,10 +86,10 @@ export default {
 				} else if(input.files){
 					this.applicationStore.upload(input.files)
 				} else {
-					alert('You must select at least one file!')
+					this.applicationStore.showError('You must select at least one file!')
 				}
 			} else {
-				alert('Oops, something went wrong! Please try again later.')
+				this.applicationStore.showError('Oops, something went wrong! Please try again later.')
 			}
 		}
 	},

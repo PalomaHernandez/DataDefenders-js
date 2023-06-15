@@ -17,6 +17,9 @@ export const useOfferStore = defineStore('offer', {
 		fetching: boolean,
 		selecting: boolean,
 		applying: boolean,
+		success: string|null,
+		error: string|null,
+		info: string|null,
 	} => ({
 		offers: [],
 		type: null,
@@ -25,8 +28,20 @@ export const useOfferStore = defineStore('offer', {
 		fetching: false,
 		selecting: true,
 		applying: false,
+		success: null,
+		error: null,
+		info: null,
 	}),
 	actions: {
+		clearMessages(): void{
+			this.info = null
+			this.success = null
+			this.error = null
+		},
+		showError(message: string): void{
+			this.clearMessages()
+			this.error = message
+		},
 		async changeType(type: OfferType): Promise<void>{
 			this.type = type
 			this.selecting = false
@@ -39,20 +54,25 @@ export const useOfferStore = defineStore('offer', {
 			clearValidationErrors()
 			if(!this.loading){
 				this.loading = true
+				this.clearMessages()
 				let url: string|null = null
 				if (this.type === OfferType.Job){
+					this.info = 'Loading job offers...'
 					url = 'offers/job'
 				}
 				else if(this.type === OfferType.Scholarship){
+					this.info = 'Loading scholarship offers...'
 					url = 'offers/scholarship'
 				}
 				if(url){
 					axiosApiInstance.get(url).then(({data}: OffersResponse): void => {
 						this.offers = data
+						this.clearMessages()
 					}).catch((error: ErrorResponse): void => {
 						this.offers = []
 						handleErrors(error).then((message: string): void => {
-							alert(message)
+							this.clearMessages()
+							this.error = message
 						}).catch((routeName: string): void => {
 							router.push({name: routeName})
 						})
@@ -91,13 +111,17 @@ export const useOfferStore = defineStore('offer', {
 					}
 					if(url){
 						this.fetching = true
+						this.clearMessages()
+						this.info = 'Reloading the offer...'
 						axiosApiInstance.get(url).then(({data}: OfferResponse): void => {
-							console.log(data)
 							this.offer = data
+							this.clearMessages()
+							this.success = 'The offer has been reloaded.'
 						}).catch((error: ErrorResponse): void => {
 							this.offer = null
 							handleErrors(error).then((message: string): void => {
-								alert(message)
+								this.clearMessages()
+								this.error = message
 							}).catch((routeName: string): void => {
 								router.push({name: routeName})
 							})
@@ -106,7 +130,8 @@ export const useOfferStore = defineStore('offer', {
 						})
 					}
 				} else {
-					alert('No offer has been selected.')
+					this.clearMessages()
+					this.error = 'No offer has been selected.'
 				}
 			}
 		},
@@ -123,6 +148,8 @@ export const useOfferStore = defineStore('offer', {
 					}
 					if(url){
 						this.applying = true
+						this.clearMessages()
+						this.info = 'Applying...'
 						axiosApiInstance.post(url, {
 							files: files,
 							comments: comments,
@@ -133,20 +160,24 @@ export const useOfferStore = defineStore('offer', {
 							},
 							withCredentials: true
 						}).then(({data}: SuccessfulResponse): void => {
+							this.clearMessages()
 							if(data.res){
 								if(this.offer){
 									this.offer.has_applied = true
 								}
-								alert(data.text)
+								this.success = data.text
 								if (this.type === OfferType.Job){
 									router.push({name: 'offers.job'})
 								} else if(this.type === OfferType.Scholarship){
 									router.push({name: 'offers.scholarship'})
 								}
+							} else {
+								this.error = data.text
 							}
 						}).catch((error: ErrorResponse): void => {
 							handleErrors(error).then((message: string): void => {
-								alert(message)
+								this.clearMessages()
+								this.error = message
 							}).catch((routeName: string): void => {
 								router.push({name: routeName})
 							})
@@ -155,7 +186,8 @@ export const useOfferStore = defineStore('offer', {
 						})
 					}	
 				} else {
-					alert('Please select files of 8MB or less.')
+					this.clearMessages()
+					this.error = 'Please select files of 8MB or less.'
 				}
 			}
 		},

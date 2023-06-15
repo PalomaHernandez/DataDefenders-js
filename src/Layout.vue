@@ -4,7 +4,7 @@
 		<div class="flex-grow font-semibold">
 			<slot name="title"/>
 		</div>
-		<div class="fixed lg:relative left-0 bottom-14 lg:left-auto lg:bottom-auto z-20 w-full lg:w-auto">
+		<div class="fixed lg:relative left-0 bottom-28 lg:left-auto lg:bottom-auto z-20 w-full lg:w-auto">
 			<div class="relative w-full lg:w-auto">
 				<div class="absolute lg:relative w-full lg:w-auto">
 					<slot name="status"/>

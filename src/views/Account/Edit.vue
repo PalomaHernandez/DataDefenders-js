@@ -6,7 +6,11 @@
 				My account
 			</RouterLink>
 		</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="authStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="authStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="authStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools>
 			<button type="submit" class="btn btn-primary" @click="update">
 				<i class="fa-solid fa-check"></i> Save changes
@@ -89,6 +93,15 @@ export default {
 		LabeledObject
 	},
 	computed: {
+		success(): string|null{
+			return this.authStore.success
+		},
+		error(): string|null{
+			return this.authStore.error
+		},
+		info(): string|null{
+			return this.authStore.info
+		},
 		isAuthenticated(): boolean{
 			return this.authStore.authenticated
 		},
@@ -112,7 +125,7 @@ export default {
 					this.authStore.updateAccount()
 				}
 			} else {
-				alert('Oops, something went wrong! Please try again later.')
+				this.authStore.showError('Oops, something went wrong! Please try again later.')
 			}
 		}
 	}

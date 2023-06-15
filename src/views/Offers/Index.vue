@@ -9,7 +9,11 @@
 				Offers
 			</button>
 		</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="offerStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="offerStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="offerStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools>
 			<button v-if="!selecting" type="button" class="tool tool-primary" @click="offerStore.load">
 				<i class="fa-solid fa-spinner animate-spin" v-if="loading"></i>
@@ -67,6 +71,15 @@ export default {
 	computed: {
 		OfferType(){
 			return OfferType
+		},
+		success(): string|null{
+			return this.offerStore.success
+		},
+		error(): string|null{
+			return this.offerStore.error
+		},
+		info(): string|null{
+			return this.offerStore.info
 		},
 		loading(): boolean{
 			return this.offerStore.loading

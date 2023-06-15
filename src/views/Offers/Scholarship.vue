@@ -6,7 +6,11 @@
 				Scholarship Offers
 			</RouterLink>
 		</template>
-		<template #status></template>
+		<template #status>
+			<div v-if="success" class="alert alert-success" @click="offerStore.clearMessages()">{{ success }}</div>
+			<div v-if="error" class="alert alert-danger" @click="offerStore.clearMessages()">{{ error }}</div>
+			<div v-if="info" class="alert alert-info" @click="offerStore.clearMessages()">{{ info }}</div>
+		</template>
 		<template #tools>
 			<RouterLink v-if="offer && !offer.has_applied" :to="{name: 'offers.scholarship.apply', params: {id: offer.id}}" class="btn btn-primary">
 				<i class="fa-solid fa-check"></i>
@@ -77,6 +81,15 @@ export default {
 		},
 	},
 	computed: {
+		success(): string|null{
+			return this.offerStore.success
+		},
+		error(): string|null{
+			return this.offerStore.error
+		},
+		info(): string|null{
+			return this.offerStore.info
+		},
 		fetching():boolean{
 			return this.offerStore.fetching
 		},
