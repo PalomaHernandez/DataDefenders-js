@@ -81,6 +81,9 @@ export const useApplicationStore = defineStore('application', {
 				} else if(this.type === OfferType.All){
 					url = `applications/${this.status}`
 				}
+				if(url && this.status === ApplicationStatus.All){
+					url = url.substring(0, url.length - 1)
+				}
 				if(url){
 					axiosApiInstance.get(url).then(({data}: ApplicationsResponse): void => {
 						this.applications = data
