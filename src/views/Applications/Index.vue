@@ -57,7 +57,7 @@
 				</div>
 				<i class="fa-solid fa-chevron-right text-gray-400"></i>
 			</RouterLink>
-			<div v-if="applications.length === 0" class="px-3 py-2 flex justify-between items-center gap-2">
+			<div v-if="applications.length === 0" class="px-3 py-2">
 				Seems like this place is empty... <RouterLink :to="{name: 'search'}">try applying to an offer!</RouterLink>
 			</div>
 		</div>

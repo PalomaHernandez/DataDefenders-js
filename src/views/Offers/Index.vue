@@ -48,7 +48,7 @@
 					<p>{{ offer.title }}</p>
 					<i class="fa-solid fa-chevron-right text-gray-400"></i>
 				</RouterLink>
-				<div v-if="offers.length === 0" class="px-3 py-2 flex justify-between items-center gap-2">
+				<div v-if="offers.length === 0" class="px-3 py-2">
 					Seems like we do not currently have <span v-text="offerTypeText"></span> offers for you. We apologize, please come back later!
 				</div>
 			</div>
