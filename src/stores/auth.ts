@@ -2,10 +2,10 @@ import router from '@/router'
 import {defineStore} from 'pinia'
 import type Account from '@/types/Account'
 import type ErrorResponse from '@/types/ErrorResponse'
+import {useStorage, type RemovableRef} from '@vueuse/core'
 import {axiosApiInstance, axiosLoginInstance} from '@/api'
 import {clearValidationErrors, handleErrors} from '@/helpers'
 import {type AccountConfirmed, type AccountResponse} from '@/types/Account'
-import {useStorage, type RemovableRef} from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', {
 	state: (): {
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', {
 		loggingIn: boolean,
 		loggingOut: boolean,
 		registering: boolean,
-		user: RemovableRef<Account | null>,
+		user: RemovableRef<Account>,
 		updating: boolean,
 		success: string|null,
 		error: string|null,
@@ -101,7 +101,6 @@ export const useAuthStore = defineStore('auth', {
 							this.authenticated = true
 							this.loggingIn = false
 							this.user = data.user
-							console.log(this.user)
 							router.push({name: 'home'})
 						} else {
 							this.error = data.text
@@ -110,8 +109,8 @@ export const useAuthStore = defineStore('auth', {
 						throw error
 					})
 				}).catch((error: ErrorResponse): void => {
+					this.clearMessages()
 					handleErrors(error).then((message: string): void => {
-						this.clearMessages()
 						this.error = message
 					}).catch((routeName: string): void => {
 						router.push({name: routeName})

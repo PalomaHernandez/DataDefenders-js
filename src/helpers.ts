@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import {apiUrl} from '@/api'
 import type ErrorResponse from '@/types/ErrorResponse'
 import ApplicationStatus from '@/types/ApplicationStatus'
 
