@@ -12,10 +12,10 @@
 			<div v-if="info" class="alert alert-info" @click="offerStore.clearMessages()">{{ info }}</div>
 		</template>
 		<template #tools>
-			<RouterLink v-if="offer && !offer.has_applied" :to="{name: 'offers.scholarship.apply', params: {id: offer.id}}" class="btn btn-primary">
+			<button  v-if="offer && !offer.has_applied" type="button" class="btn btn-primary" @click="offerStore.payment">
 				<i class="fa-solid fa-check"></i>
-				Apply
-			</RouterLink>
+				Pay and apply
+			</button>
 			<button type="button" class="tool tool-primary" @click="offerStore.fetch()">
 				<i class="fa-solid fa-spinner animate-spin" v-if="fetching"></i>
 				<i class="fa-solid fa-sync" v-else></i>

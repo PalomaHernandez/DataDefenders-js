@@ -16,7 +16,7 @@
 	<main class="flex-grow flex flex-col gap-3 overflow-y-auto bg-gray-50">
 		<slot/>
 	</main>
-	<footer class="bg-sky-900">
+	<footer v-if="isAuthenticated" class="bg-sky-900">
 		<nav class="main-nav flex">
 			<RouterLink :to="{name: 'search'}">
 				<i class="fa-solid fa-search"></i>
@@ -71,7 +71,7 @@ export default {
 			this.authStore.logout()
 		}
 	},
-	mounted():void {
+	beforeMount():void {
 		if(this.isNotAuthenticated && router.currentRoute.value.name !== 'login' && router.currentRoute.value.name !== 'register'){
 			this.authStore.logout()
 		}

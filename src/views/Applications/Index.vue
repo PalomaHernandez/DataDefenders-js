@@ -31,6 +31,7 @@
 						<button type="button" class="btn btn-primary" @click="applicationStore.switchType(OfferType.Scholarship)">Scholarship</button>
 						<p class="font-medium text-lg">Status</p>
 						<button type="button" class="btn btn-primary" @click="applicationStore.switchStatus(ApplicationStatus.All)">All</button>
+						<button type="button" class="btn btn-payment" @click="applicationStore.switchStatus(ApplicationStatus.Payment)">Payment</button>
 						<button type="button" class="btn btn-pending" @click="applicationStore.switchStatus(ApplicationStatus.Pending)">Pending</button>
 						<button type="button" class="btn btn-documentation" @click="applicationStore.switchStatus(ApplicationStatus.Documentation)">Documentation</button>
 						<button type="button" class="btn btn-accepted" @click="applicationStore.switchStatus(ApplicationStatus.Accepted)">Accepted</button>

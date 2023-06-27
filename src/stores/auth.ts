@@ -5,24 +5,25 @@ import type ErrorResponse from '@/types/ErrorResponse'
 import {axiosApiInstance, axiosLoginInstance} from '@/api'
 import {clearValidationErrors, handleErrors} from '@/helpers'
 import {type AccountConfirmed, type AccountResponse} from '@/types/Account'
+import {useStorage, type RemovableRef} from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', {
 	state: (): {
-		authenticated: boolean,
+		authenticated: RemovableRef<boolean>,
 		loggingIn: boolean,
 		loggingOut: boolean,
 		registering: boolean,
-		currentAccount: Account | null,
+		user: RemovableRef<Account | null>,
 		updating: boolean,
 		success: string|null,
 		error: string|null,
 		info: string|null,
 	} => ({
-		authenticated: false,
+		authenticated: useStorage('authenticated', false),
 		loggingIn: false,
 		loggingOut: false,
 		registering: false,
-		currentAccount: null,
+		user: useStorage('user', {} as Account),
 		updating: false,
 		success: null,
 		error: null,
@@ -68,11 +69,11 @@ export const useAuthStore = defineStore('auth', {
 		},
 		async updateAccount(): Promise<void>{
 			clearValidationErrors()
-			if(this.currentAccount && !this.updating){
+			if(this.user && !this.updating){
 				this.updating = true
 				this.clearMessages()
 				this.info = 'Updating your account...'
-				return axiosApiInstance.patch(`account/update/${this.currentAccount.id}`, this.currentAccount).then((): void => {
+				return axiosApiInstance.patch(`account/update/${this.user.id}`, this.user).then((): void => {
 					this.clearMessages()
 					this.success = 'The account was updated successfully.'
 				}).catch((error: ErrorResponse): void => {
@@ -99,7 +100,8 @@ export const useAuthStore = defineStore('auth', {
 						if(data.res){
 							this.authenticated = true
 							this.loggingIn = false
-							this.currentAccount = data.user
+							this.user = data.user
+							console.log(this.user)
 							router.push({name: 'home'})
 						} else {
 							this.error = data.text
@@ -129,7 +131,6 @@ export const useAuthStore = defineStore('auth', {
 					this.authenticated = false
 					this.loggingOut = false
 					this.clearMessages()
-					this.success = 'You have logged out successfully!'
 					router.push({name: 'login'})
 				}).catch((error: ErrorResponse): void => {
 					handleErrors(error).then((message: string): void => {

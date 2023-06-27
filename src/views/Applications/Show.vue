@@ -12,6 +12,7 @@
 			<div v-if="info" class="alert alert-info" @click="applicationStore.clearMessages()">{{ info }}</div>
 		</template>
 		<template #tools>
+			<a v-if="application && isPayment(application.status)" :href="application.payment_url" class="btn btn-primary">Pay now</a>
 			<button type="button" class="tool tool-primary" @click="applicationStore.fetch()">
 				<i class="fa-solid fa-spinner animate-spin" v-if="fetching"></i>
 				<i class="fa-solid fa-sync" v-else></i>
@@ -58,7 +59,7 @@ import Loading from '@/components/Loading.vue'
 import Comment from '@/components/Comment.vue'
 import type UserComment from '@/types/Comment'
 import type Application from '@/types/Application'
-import {isDocumentation, printDateTime} from '@/helpers'
+import {isPayment, isDocumentation, printDateTime} from '@/helpers'
 import {useApplicationStore} from '@/stores/applications'
 import LabeledObject from '@/components/LabeledObject.vue'
 import StatusIndicator from '@/components/StatusIndicator.vue'
@@ -112,6 +113,7 @@ export default {
 		}
 	},
 	methods: {
+		isPayment,
 		isDocumentation,
 		printDateTime,
 		route(application: Application): string{

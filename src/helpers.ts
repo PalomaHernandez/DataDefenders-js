@@ -87,6 +87,10 @@ export function isAccepted(status: string):boolean{
 	return status === ApplicationStatus.Accepted
 }
 
+export function isPayment(status: string):boolean{
+	return status === ApplicationStatus.Payment
+}
+
 export function isPending(status: string):boolean{
 	return status === ApplicationStatus.Pending
 }

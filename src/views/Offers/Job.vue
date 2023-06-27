@@ -12,7 +12,7 @@
 			<div v-if="info" class="alert alert-info" @click="offerStore.clearMessages()">{{ info }}</div>
 		</template>
 		<template #tools>
-			<RouterLink v-if="offer && !offer.has_applied" :to="{name: 'offers.job.apply', params: {id: offer.id}}" class="btn btn-primary">
+			<RouterLink v-if="offer && !offer.has_applied" type="button" class="btn btn-primary" :to="{name: 'offers.job.apply', params: {id: offer.id} }">
 				<i class="fa-solid fa-check"></i>
 				Apply
 			</RouterLink>
