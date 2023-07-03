@@ -14,6 +14,7 @@ export default interface Application extends Model {
 	offer: Offer,
 	comments: UserComment[],
 	documentation_files: DocumentationFile[],
+	payment_url: string,
 	is_job: boolean,
 	is_scholarship: boolean,
 }

@@ -106,7 +106,7 @@ export default {
 			return this.authStore.authenticated
 		},
 		currentAccount(): Account | null{
-			return this.authStore.currentAccount
+			return this.authStore.user
 		}
 	},
 	setup(){

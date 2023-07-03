@@ -6,7 +6,7 @@ import type ErrorResponse from '@/types/ErrorResponse'
 import OfferType from '@/types/OfferType'
 import {checkFileSizes, clearValidationErrors, handleErrors} from '@/helpers'
 import {type OfferResponse, type OffersResponse} from '@/types/Offer'
-import type SuccessfulResponse from '@/types/SuccessfulResponse'
+import type PaymentResponse from '@/types/PaymentResponse'
 
 export const useOfferStore = defineStore('offer', {
 	state: (): {
@@ -159,18 +159,14 @@ export const useOfferStore = defineStore('offer', {
 								'Content-Type': 'multipart/form-data'
 							},
 							withCredentials: true
-						}).then(({data}: SuccessfulResponse): void => {
+						}).then(({data}: PaymentResponse): void => {
 							this.clearMessages()
 							if(data.res){
 								if(this.offer){
 									this.offer.has_applied = true
 								}
 								this.success = data.text
-								if (this.type === OfferType.Job){
-									router.push({name: 'offers.job'})
-								} else if(this.type === OfferType.Scholarship){
-									router.push({name: 'offers.scholarship'})
-								}
+								router.push({name: 'applications.show', params: {id: data.applicationId}})
 							} else {
 								this.error = data.text
 							}

@@ -1,5 +1,6 @@
 <template>
-	<div v-if="isAccepted" class="badge badge-success">Accepted</div>
+	<div v-if="isPayment" class="badge badge-teal">Payment</div>
+	<div v-else-if="isAccepted" class="badge badge-success">Accepted</div>
 	<div v-else-if="isPending" class="badge badge-warning">Pending</div>
 	<div v-else-if="isDocumentation" class="badge badge-purple">Requires Documentation</div>
 	<div v-else-if="isRejected" class="badge badge-danger">Rejected</div>
@@ -7,7 +8,7 @@
 
 <script lang="ts">
 import {type Ref, ref, type UnwrapRef} from 'vue'
-import {isAccepted, isRejected, isPending, isDocumentation} from '@/helpers'
+import {isPayment, isAccepted, isRejected, isPending, isDocumentation} from '@/helpers'
 
 export default {
 	name: "StatusIndicator",
@@ -18,6 +19,9 @@ export default {
 		},
 	},
 	computed: {
+		isPayment():boolean{
+			return isPayment(this.status)
+		},
 		isAccepted():boolean{
 			return isAccepted(this.status)
 		},

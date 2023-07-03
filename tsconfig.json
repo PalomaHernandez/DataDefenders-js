@@ -3,18 +3,28 @@
 	"include": [
 		"env.d.ts",
 		"src/**/*",
+		"src/**/*.ts",
 		"src/**/*.vue"
 	],
 	"compilerOptions": {
 		"baseUrl": ".",
-		"target": "es2022",
-		"module": "es2022",
+		"target": "esnext",
+		"module": "esnext",
+		"strict": true,
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
 		"moduleResolution": "node",
 		"paths": {
 			"@/*": [
 				"./src/*"
 			]
-		}
+		},
+		"lib": [
+			"esnext",
+			"dom",
+			"dom.iterable"
+		]
 	},
 	"references": [
 		{

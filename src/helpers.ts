@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import {apiUrl} from '@/api'
 import type ErrorResponse from '@/types/ErrorResponse'
 import ApplicationStatus from '@/types/ApplicationStatus'
 
@@ -85,6 +84,10 @@ export function checkFileSizes(files: FileList):boolean {
 
 export function isAccepted(status: string):boolean{
 	return status === ApplicationStatus.Accepted
+}
+
+export function isPayment(status: string):boolean{
+	return status === ApplicationStatus.Payment
 }
 
 export function isPending(status: string):boolean{
