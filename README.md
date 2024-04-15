@@ -1,6 +1,18 @@
 # DataDefenders-js
 
-This is the beginning of our Vue.js SPA for UniManager users.
+SPA en Vue.js que implementa la funcionalidad para usuarios de UniManager. Los usuarios pueden ver las ofertas disponibles, aplicar a cualquiera de ellas y abonar la inscripción utilizando Mercado Pago.
+
+## Images
+
+![alt text](https://github.com/PalomaHernandez/DataDefenders-js/blob/main/img/unimanagerjs.png?raw=true)
+#
+![alt text](https://github.com/PalomaHernandez/DataDefenders-js/blob/main/img/unimanagerjs-login.png?raw=true)
+#
+![alt text](https://github.com/PalomaHernandez/DataDefenders-js/blob/main/img/unimanagerjs-offers.png?raw=true)
+#
+![alt text](https://github.com/PalomaHernandez/DataDefenders-js/blob/main/img/unimanagerjs-profile.png?raw=true)
+#
+![alt text](https://github.com/PalomaHernandez/DataDefenders-js/blob/main/img/unimanagerjs-joboffer.png?raw=true)
 
 ## Developers
 
